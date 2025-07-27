@@ -47,10 +47,23 @@
       transition: opacity 1s ease-in-out;
     }
 
-    h1 {
+    h1.typing {
       color: #c2185b;
       font-size: 2.5rem;
       margin-bottom: 20px;
+      border-right: 2px solid #c2185b;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3.5s steps(40, end) forwards, blink 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
     }
 
     .messages {
@@ -200,7 +213,7 @@
   <div class="emoji-bg" id="emojiBg"></div>
 
   <div class="content" id="content">
-    <h1>To the One Who Makes My Heart Bloom</h1>
+    <h1 class="typing">To the One Who Makes My Heart Bloom</h1>
     <div class="messages">
       <div class="message">🌸 I don’t know when it started, but thinking of you became my favorite habit.</div>
       <div class="message">💖 You don’t just cross my mind — you live in it.</div>
