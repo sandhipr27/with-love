@@ -2,435 +2,256 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>To the One Who Makes My Heart Bloom</title>
   <style>
-    * { box-sizing: border-box; }
-
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
+      background: linear-gradient(to bottom right, #ffe4e1, #fff0f5);
       font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       overflow: hidden;
     }
-
-    .screen {
+    .cover {
       position: absolute;
       top: 0;
       left: 0;
-      height: 100vh;
-      width: 100vw;
-      display: none;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #ffb6c1, #ff69b4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 1s ease;
-      z-index: 0;
-    }
-
-    .screen.active {
-      display: flex;
-      opacity: 1;
-      z-index: 1;
-    }
-
-    .cover {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
+      color: white;
       font-size: 2rem;
       text-align: center;
       cursor: pointer;
-      flex-direction: column;
       z-index: 10;
     }
-}
-
-      background-size: contain;
-      opacity: 0;
-      transform: scale(0.5);
-      animation: popIn 1.2s ease-out forwards 0.5s;
+    .cover.hide {
+      display: none;
     }
 
-    @keyframes popIn {
-      to { opacity: 1; transform: scale(1); }
+    .content {
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    h1 {
+      color: #c2185b;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
     }
 
     .messages {
-      margin-top: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-top: 20px;
     }
 
     .message {
-      background-color: #fffafc;
-      border: 1px dashed #ff69b4;
+      background: #fce4ec;
+      border: 2px dashed #ec407a;
       padding: 15px 25px;
-      margin: 10px 0;
       border-radius: 30px;
+      margin: 10px;
+      color: #880e4f;
       font-size: 1.1rem;
-      color: #d6336c;
-      box-shadow: 0 0 10px rgba(255,182,193,0.3);
+      box-shadow: 0 0 15px rgba(255, 182, 193, 0.4);
       opacity: 0;
       transform: translateY(30px);
       animation: floatUp 0.6s ease-out forwards;
     }
 
-    .message:nth-child(1) { animation-delay: 1.7s; }
-    .message:nth-child(2) { animation-delay: 2.1s; }
-    .message:nth-child(3) { animation-delay: 2.5s; }
-    .message:nth-child(4) { animation-delay: 2.9s; }
-    .message:nth-child(5) { animation-delay: 3.3s; }
+    .message:nth-child(1) { animation-delay: 1s; }
+    .message:nth-child(2) { animation-delay: 1.5s; }
+    .message:nth-child(3) { animation-delay: 2s; }
+    .message:nth-child(4) { animation-delay: 2.5s; }
+    .message:nth-child(5) { animation-delay: 3s; }
 
     @keyframes floatUp {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .hearts {
+    .emoji-bg {
       position: absolute;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
       pointer-events: none;
-      z-index: 1;
     }
 
     .emoji {
       position: absolute;
       font-size: 24px;
-      animation: float 6s linear infinite;
-      opacity: 0.7;
+      opacity: 0.8;
+      animation: float 8s linear infinite;
     }
 
     @keyframes float {
-      0% { transform: translateY(0) scale(1); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
     }
 
-    .next-btn {
+    .transition-btn {
       margin-top: 30px;
       padding: 12px 24px;
-      background-color: #ff69b4;
-      color: white;
+      font-size: 1rem;
       border: none;
       border-radius: 30px;
+      background-color: #e91e63;
+      color: white;
       cursor: pointer;
-      font-size: 1rem;
-      transition: 0.3s;
+      transition: 0.3s ease-in-out;
+    }
+    .transition-btn:hover {
+      transform: scale(1.1);
     }
 
-    .next-btn:hover { transform: scale(1.05); }
-
-    /* Proposal screen */
-    .proposal h1.typing {
-      color: #e91e63;
-      font-size: 2.2rem;
-      border-right: 2px solid #e91e63;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 3.5s steps(40, end) forwards, blink 0.7s step-end infinite;
+    .screen2 {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fadeIn 1.5s ease forwards;
     }
 
-    @keyframes typing {
-      to { width: 100%; }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
+    .screen2 h1 {
+      color: #c2185b;
+      font-size: 2.3rem;
+      margin-bottom: 15px;
     }
-
-    .proposal p {
+    .screen2 p {
       font-size: 1.2rem;
-      color: #444;
-      margin-top: 20px;
       max-width: 600px;
+      color: #444;
     }
 
     .btns {
-      margin-top: 40px;
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
+      margin-top: 30px;
     }
-
     .btns button {
       padding: 12px 24px;
       font-size: 1rem;
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.3s ease;
     }
-
-    .yes {
-      background-color: #ff69b4;
+    .btns .yes {
+      background: #ff4081;
       color: white;
     }
-
-    .no {
-      background-color: #fff;
-      color: #ff69b4;
-      border: 2px solid #ff69b4;
+    .btns .no {
+      background: white;
+      color: #ff4081;
+      border: 2px solid #ff4081;
     }
-
-    .music-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      cursor: pointer;
-      z-index: 100;
-    }
-
-    .sparkle-bg, canvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .sparkle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background-color: #ffc0cb;
-      border-radius: 50%;
-      opacity: 0.6;
-      animation: float 8s linear infinite;
-    }
-
-    /* Thank You Screen */
-    .celebrate h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      animation: fadeIn 2s ease-in-out forwards;
-      color: #e91e63;
-    }
-
-    .celebrate p {
-      font-size: 1.2rem;
-      color: #444;
-      animation: fadeIn 3s ease-in-out forwards;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .btns button:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-
   <div class="cover" id="cover">
-    💌 A little confession just for you…<br>
+    💌 A little confession just for you…
+    <br>
     <span style="font-size: 1.2rem; margin-top: 10px;">Click to Open</span>
   </div>
 
-  <div class="hearts" id="hearts"></div>
- 
-  <!-- Screen 1 -->
-  <div class="screen active" id="screen1" style="background: url('https://i.imgur.com/oUj4K2v.jpg') no-repeat center center/cover;">
-    <div style="background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 15px;">
-      <h1 style="color:#e91e63;">To the One Who Makes My Heart Bloom</h1>
-      <div class="bouquet"></div>
-      <div class="messages">
-        <div class="message">🌸 I don’t know when it started, but thinking of you became my favorite habit.</div>
-        <div class="message">💖 You don’t just cross my mind — you live in it.</div>
-        <div class="message">🌼 You’re not just someone special. You’re the calm in my chaos.</div>
-        <div class="message">🌷 My world gets softer when your name pops up.</div>
-        <div class="message">🫶 If you ever wonder if someone silently cares — it’s me.</div>
-      </div>
-      <button class="next-btn" onclick="showScreen('screen2')">Soo...</button>
+  <div class="emoji-bg" id="emojiBg"></div>
+
+  <div class="content" id="content">
+    <h1>To the One Who Makes My Heart Bloom</h1>
+    <div class="messages">
+      <div class="message">🌸 I don’t know when it started, but thinking of you became my favorite habit.</div>
+      <div class="message">💖 You don’t just cross my mind — you live in it.</div>
+      <div class="message">🌼 You’re not just someone special. You’re the calm in my chaos.</div>
+      <div class="message">🌷 My world gets softer when your name pops up.</div>
+      <div class="message">🫶 If you ever wonder if someone silently cares — it’s me.</div>
     </div>
+    <button class="transition-btn" onclick="showSecondScreen()">Soo...</button>
   </div>
 
-  <!-- Screen 2 -->
-  <div class="screen proposal" id="screen2">
-    <div class="sparkle-bg" id="sparkleBg"></div>
-    <h1 class="typing">Will You Accept Me As Your Life Partner?</h1>
+  <div class="screen2" id="screen2">
+    <h1>Will You Accept Me As Your Life Partner?</h1>
     <p>I might not have the perfect words, but I promise a heart that's honest, hands that hold you strong, and eyes that only see you. Would you walk this life with me — not just today, but for forever?</p>
     <div class="btns">
-      <button class="yes" onclick="showScreen('screen3')">Yes, I Do!</button>
-      <button class="no" onclick="alert('It’s okay, you still mean the world to me 💔');">Not Yet</button>
+      <button class="yes" onclick="alert('You just made my whole world 💖');">Yes, I Do!</button>
+      <button class="no" onclick="alert('It's okay, you still mean the world to me 💔');">Not Yet</button>
     </div>
-  </div>
-
-  <!-- Screen 3 -->
-  <div class="screen celebrate" id="screen3">
-    <canvas id="fireworks"></canvas>
-    <h1>💍 You Just Made My World Complete!</h1>
-    <p>Thank you for saying yes. I promise to treasure this moment and cherish you endlessly. Let’s bloom forever, together. 🌸💞</p>
   </div>
 
   <script>
     const cover = document.getElementById('cover');
-    const hearts = document.getElementById('hearts');
-    const sparkleBg = document.getElementById('sparkleBg');
-    const music = document.getElementById('bgMusic');
-
-    function toggleMusic() {
-      music.paused ? music.play() : music.pause();
-    }
-
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-        s.style.display = 'none';
-      });
-      const next = document.getElementById(id);
-      next.style.display = 'flex';
-      setTimeout(() => next.classList.add('active'), 50);
-
-      if (id === 'screen2') createSparkles();
-      if (id === 'screen3') startFireworks();
-    }
+    const content = document.getElementById('content');
+    const screen2 = document.getElementById('screen2');
+    const emojiBg = document.getElementById('emojiBg');
 
     cover.addEventListener('click', () => {
-      cover.style.display = 'none';
-      showScreen('screen1');
+      cover.classList.add('hide');
+      content.style.opacity = 1;
       createFloatingEmojis();
     });
 
+    function showSecondScreen() {
+      content.style.display = 'none';
+      screen2.style.display = 'flex';
+    }
+
     function createFloatingEmojis() {
-      const emojis = ['❤️','🌼','💕','🌸','🌹'];
+      const emojis = ['❤️', '🌼', '💕', '🌸', '🌹', '💖', '💘', '🫶'];
       setInterval(() => {
         const span = document.createElement('span');
         span.classList.add('emoji');
         span.style.left = Math.random() * 100 + 'vw';
         span.style.bottom = '0';
         span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        hearts.appendChild(span);
-        setTimeout(() => span.remove(), 6000);
+        emojiBg.appendChild(span);
+
+        setTimeout(() => {
+          span.remove();
+        }, 8000);
       }, 300);
     }
-
-    function createSparkles() {
-      for (let i = 0; i < 100; i++) {
-        const dot = document.createElement('div');
-        dot.classList.add('sparkle');
-        dot.style.left = Math.random() * 100 + 'vw';
-        dot.style.top = Math.random() * 100 + 'vh';
-        dot.style.animationDelay = Math.random() * 5 + 's';
-        sparkleBg.appendChild(dot);
-      }
-    }
-
-    // Fireworks animation
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas?.getContext('2d');
-    let fireworks = [];
-
-    function startFireworks() {
-      if (!ctx) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      fireworks = [];
-
-      class Firework {
-        constructor() {
-          this.x = Math.random() * canvas.width;
-          this.y = canvas.height;
-          this.targetY = Math.random() * canvas.height / 2;
-          this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-          this.radius = Math.random() * 3 + 2;
-          this.speed = Math.random() * 2 + 2;
-          this.exploded = false;
-          this.particles = [];
-        }
-
-        update() {
-          if (!this.exploded) {
-            this.y -= this.speed;
-            if (this.y <= this.targetY) {
-              this.exploded = true;
-              for (let i = 0; i < 20; i++) {
-                this.particles.push(new Particle(this.x, this.y, this.color));
-              }
-            }
-          }
-          this.particles.forEach(p => p.update());
-        }
-
-        draw() {
-          if (!this.exploded) {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-          }
-          this.particles.forEach(p => p.draw());
-        }
-      }
-
-      class Particle {
-        constructor(x, y, color) {
-          this.x = x;
-          this.y = y;
-          this.speedX = (Math.random() - 0.5) * 5;
-          this.speedY = (Math.random() - 0.5) * 5;
-          this.alpha = 1;
-          this.color = color;
-        }
-
-        update() {
-          this.x += this.speedX;
-          this.y += this.speedY;
-          this.alpha -= 0.02;
-        }
-
-        draw() {
-          ctx.save();
-          ctx.globalAlpha = this.alpha;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-          ctx.fillStyle = this.color;
-          ctx.fill();
-          ctx.restore();
-        }
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (Math.random() < 0.03) fireworks.push(new Firework());
-        fireworks.forEach((fw, i) => {
-          fw.update();
-          fw.draw();
-          if (fw.exploded && fw.particles.every(p => p.alpha <= 0)) {
-            fireworks.splice(i, 1);
-          }
-        });
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    }
-
-    window.addEventListener('resize', () => {
-      if (canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-    });
   </script>
 </body>
 </html>
